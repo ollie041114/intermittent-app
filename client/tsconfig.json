@@ -1,0 +1,28 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "isolatedModules": true,
+        "jsx": "react-native",
+        "lib": ["es2019"],
+        "types": ["react-native", "jest"],
+        "moduleResolution": "node",
+        "noEmit": true,
+        "strict": true,
+        "target": "esnext",
+
+        "paths": {
+            "utils/*": ["./src/utils/*"],
+            "hooks/*": ["./src/hooks/*"],
+            "shared/*": ["./src/shared/*"]
+        }
+    },
+    "exclude": [
+        "node_modules",
+        "babel.config.js",
+        "metro.config.js",
+        "jest.config.js"
+    ],
+    "extends": "expo/tsconfig.base"
+}

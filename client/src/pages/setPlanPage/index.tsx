@@ -15,6 +15,7 @@ import { DepositInput } from "./components/depositInput";
 import { CustomButton } from "shared/customButton";
 
 import { useSelector } from "react-redux";
+import { GlobalVariables } from "utils/globalVariables";
 
 const initialWeekMap: Map<string, boolean> = new Map([
     ["mon", false],
@@ -74,19 +75,22 @@ export const SetPlanPage = ({
                     <View>
                         <CustomButton
                             onPress={() => {
-                                fetch("http://192.168.1.10:3030/plan", {
-                                    method: "POST",
-                                    headers: {
-                                        Accept: "application/json",
-                                        "Content-Type": "application/json",
-                                    },
-                                    body: JSON.stringify({
-                                        userId: id,
-                                        hoursPerDay,
-                                        depositAmount,
-                                        ...Object.fromEntries(weekMap),
-                                    }),
-                                })
+                                fetch(
+                                    `${GlobalVariables.serverHost}:${GlobalVariables.serverPort}/plan`,
+                                    {
+                                        method: "POST",
+                                        headers: {
+                                            Accept: "application/json",
+                                            "Content-Type": "application/json",
+                                        },
+                                        body: JSON.stringify({
+                                            userId: id,
+                                            hoursPerDay,
+                                            depositAmount,
+                                            ...Object.fromEntries(weekMap),
+                                        }),
+                                    }
+                                )
                                     .then((response) => {
                                         console.log("Plan is added");
                                     })

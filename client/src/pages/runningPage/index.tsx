@@ -33,6 +33,9 @@ export const RunningPage = ({
         startTime,
     }: { runningPlan: RunningPlan; startTime: number } = route.params;
     const [earnedDeposit, increaseDeposit] = useState(0);
+    const depositAmount = runningPlan.depositAmount;
+    const [currStepCount, setCurrStepCount] = useState(0);
+
     return (
         <SafeAreaView>
             <ScrollView
@@ -54,12 +57,27 @@ export const RunningPage = ({
                         ).toPrecision(5)}
                         %
                     </Text>
-                    <ProgressCircleWrapper increaseDeposit={increaseDeposit} />
-                    <Pedo />
+                    <ProgressCircleWrapper
+                        earnedDeposit={earnedDeposit}
+                        increaseDeposit={increaseDeposit}
+                        depositAmount={depositAmount}
+                    />
+                    <Pedo
+                        currStepCount={currStepCount}
+                        setCurrStepCount={setCurrStepCount}
+                    />
                     <View style={{ marginTop: 25 }}></View>
                     <CustomButton
                         onPress={() => {
-                            navigation.navigate("Running Finished Page");
+                            navigation.navigate("Running Finished Page", {
+                                currStepCount,
+                                earnedDeposit,
+                                timeRunned: (
+                                    Math.floor(
+                                        Math.floor(curTime - startTime) / 1000
+                                    ) / 3600
+                                ).toPrecision(5),
+                            });
                         }}
                         backgroundColor="black"
                         text="Finish running"

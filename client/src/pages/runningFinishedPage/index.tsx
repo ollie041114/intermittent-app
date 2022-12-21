@@ -17,9 +17,12 @@ const distance = 10;
 
 export const RunningFinishedPage = ({
     navigation,
+    route,
 }: {
     navigation: StackNavigationProp<any, any>;
+    route: any;
 }) => {
+    const { currStepCount, earnedDeposit, timeRunned } = route.params;
     return (
         <SafeAreaView>
             <ScrollView
@@ -29,10 +32,12 @@ export const RunningFinishedPage = ({
                 <View style={styles.container}>
                     <Text style={styles.title}>Running is finished!</Text>
                     <View style={styles.statistics}>
-                        <Text style={styles.text}>Distance: {distance}km</Text>
-                        <Text style={styles.text}>Time: {hours}h</Text>
                         <Text style={styles.text}>
-                            Amount earned: {deposit}won
+                            Steps: {currStepCount} steps
+                        </Text>
+                        <Text style={styles.text}>Time: {timeRunned}h</Text>
+                        <Text style={styles.text}>
+                            Amount earned: {earnedDeposit}won
                         </Text>
                     </View>
                     <CustomButton

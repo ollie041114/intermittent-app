@@ -15,6 +15,7 @@ import {
 import { CustomButton } from "../../shared/customButton";
 
 import { useSelector } from "react-redux";
+import { GlobalVariables } from "utils/globalVariables";
 
 export const MainPage = ({
     navigation,
@@ -44,13 +45,16 @@ export const MainPage = ({
                     <View style={{ margin: 20 }}></View>
                     <CustomButton
                         onPress={() => {
-                            fetch(`http://192.168.1.10:3030/${id}`, {
-                                method: "GET",
-                                headers: {
-                                    Accept: "application/json",
-                                    "Content-Type": "application/json",
-                                },
-                            })
+                            fetch(
+                                `${GlobalVariables.serverHost}:${GlobalVariables.serverPort}/${id}`,
+                                {
+                                    method: "GET",
+                                    headers: {
+                                        Accept: "application/json",
+                                        "Content-Type": "application/json",
+                                    },
+                                }
+                            )
                                 .then((response) => response.json())
                                 .then((plansFromServer) => {
                                     navigation.navigate("Check Plan Page", {

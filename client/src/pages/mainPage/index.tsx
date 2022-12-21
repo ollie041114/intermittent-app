@@ -21,9 +21,11 @@ export const MainPage = ({
 }: {
     navigation: StackNavigationProp<any, any>;
 }) => {
-    const name = useSelector(
-        (state: { name: string; id: number }) => state.name
-    );
+    const [name, id] = useSelector((state: { name: string; id: number }) => [
+        state.name,
+        state.id,
+    ]);
+
     return (
         <SafeAreaView>
             <ScrollView
@@ -42,7 +44,22 @@ export const MainPage = ({
                     <View style={{ margin: 20 }}></View>
                     <CustomButton
                         onPress={() => {
-                            navigation.navigate("Check Plan Page");
+                            fetch(`http://192.168.1.10:3030/${id}`, {
+                                method: "GET",
+                                headers: {
+                                    Accept: "application/json",
+                                    "Content-Type": "application/json",
+                                },
+                            })
+                                .then((response) => response.json())
+                                .then((plansFromServer) => {
+                                    navigation.navigate("Check Plan Page", {
+                                        plansFromServer,
+                                    });
+                                })
+                                .catch((error) => {
+                                    console.log("ERROR: ", error);
+                                });
                         }}
                         backgroundColor="black"
                         text="Check My Plan"

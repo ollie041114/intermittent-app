@@ -10,7 +10,7 @@ export const useColorIndication = (distance: number) => {
     return colorIndicator;
 };
 
-export const ProgressCircleWrapper = () => {
+export const ProgressCircleWrapper = (props: any) => {
     const METERS_IN_STEP = 0.762;
 
     // const [key, setKey] = useState(0);
@@ -28,6 +28,7 @@ export const ProgressCircleWrapper = () => {
     const [end, setEnd] = useState(false);
     // this is going to be
 
+    const { increaseDeposit } = props;
     return (
         <View>
             <Text>
@@ -41,6 +42,7 @@ export const ProgressCircleWrapper = () => {
                 add={add}
                 game={{ gameCount, setGameCount }}
                 points={{ points, setPoints }}
+                increaseDeposit={increaseDeposit}
             />
             <Button
                 onPress={() => {

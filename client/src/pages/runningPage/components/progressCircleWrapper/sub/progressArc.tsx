@@ -20,6 +20,7 @@ type RewardPlayerProps = {
     targetVelocity: number;
     parentCallback: any;
     add?: number;
+    increaseDeposit: any;
 };
 
 const Reward = (props: RewardPlayerProps) => {
@@ -47,9 +48,10 @@ const Player = (props: RewardPlayerProps) => {
     // const add = props.add;
     const { currStepCount } = usePedometer();
     const [distance, setDistance] = useState(0);
-
+    const { increaseDeposit } = props;
     useEffect(() => {
         setDistance(currStepCount * METERS_IN_STEP);
+        increaseDeposit(currStepCount);
     }, [currStepCount]);
 
     useEffect(() => {
@@ -83,12 +85,12 @@ export const ProgressArc = (props: any) => {
     const { gameCount, setGameCount } = props.game;
     const { points, setPoints } = props.points;
 
-    const [playerDistance, setPlayerDistance] = useState(0);
+    const [playerDistance, setPlayerDistance] = useState(100);
     const [rewardDistance, setRewardDistance] = useState(0);
     // callbacks, are set inside of Player and Reward components.
 
     // const [points, setPoints] = useState(0);
-
+    const { increaseDeposit } = props;
     useEffect(() => {
         var color = "red";
         if (rewardDistance >= targetDistance) {
@@ -143,7 +145,7 @@ export const ProgressArc = (props: any) => {
                         d={progressArc(playerDistance / targetDistance)}
                         fill={color}
                     />
-                    <Reward
+                    {/* <Reward
                         gameCount={gameCount}
                         arcRadius={middleRadius}
                         r={10}
@@ -153,7 +155,7 @@ export const ProgressArc = (props: any) => {
                         targetDistance={targetDistance}
                         targetVelocity={targetVelocity}
                         parentCallback={setRewardDistance}
-                    />
+                    /> */}
                     <Player
                         gameCount={gameCount}
                         arcRadius={middleRadius}
@@ -165,6 +167,7 @@ export const ProgressArc = (props: any) => {
                         targetDistance={targetDistance}
                         targetVelocity={targetVelocity}
                         parentCallback={setPlayerDistance}
+                        increaseDeposit={increaseDeposit}
                     />
                 </G>
             </Svg>

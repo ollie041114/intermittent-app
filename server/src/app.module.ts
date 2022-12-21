@@ -20,6 +20,7 @@ import { Plan } from './entities/plan.entity';
       database: process.env.DB_DATABASE,
       entities: [User, Plan],
       synchronize: true,
+      logging: true,
     }),
     TypeOrmModule.forFeature([User]),
     TypeOrmModule.forFeature([Plan]),

@@ -14,37 +14,37 @@ export const CheckboxArray = ({
             <WeekCheckbox
                 updateMap={updateMap}
                 weekMap={weekMap}
-                weekDay="Mon"
+                weekDay="mon"
             ></WeekCheckbox>
             <WeekCheckbox
                 updateMap={updateMap}
                 weekMap={weekMap}
-                weekDay="Tue"
+                weekDay="tue"
             ></WeekCheckbox>
             <WeekCheckbox
                 updateMap={updateMap}
                 weekMap={weekMap}
-                weekDay="Wen"
+                weekDay="wed"
             ></WeekCheckbox>
             <WeekCheckbox
                 updateMap={updateMap}
                 weekMap={weekMap}
-                weekDay="Thu"
+                weekDay="thu"
             ></WeekCheckbox>
             <WeekCheckbox
                 updateMap={updateMap}
                 weekMap={weekMap}
-                weekDay="Fri"
+                weekDay="fri"
             ></WeekCheckbox>
             <WeekCheckbox
                 updateMap={updateMap}
                 weekMap={weekMap}
-                weekDay="Sat"
+                weekDay="sat"
             ></WeekCheckbox>
             <WeekCheckbox
                 updateMap={updateMap}
                 weekMap={weekMap}
-                weekDay="Sun"
+                weekDay="sun"
             ></WeekCheckbox>
         </View>
     );

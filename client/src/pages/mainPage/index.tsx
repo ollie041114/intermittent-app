@@ -15,15 +15,18 @@ import {
 import { CustomButton } from "../../shared/customButton";
 
 import { useSelector } from "react-redux";
+import { GlobalVariables } from "utils/globalVariables";
 
 export const MainPage = ({
     navigation,
 }: {
     navigation: StackNavigationProp<any, any>;
 }) => {
-    const name = useSelector(
-        (state: { name: string; id: number }) => state.name
-    );
+    const [name, id] = useSelector((state: { name: string; id: number }) => [
+        state.name,
+        state.id,
+    ]);
+
     return (
         <SafeAreaView>
             <ScrollView
@@ -42,7 +45,25 @@ export const MainPage = ({
                     <View style={{ margin: 20 }}></View>
                     <CustomButton
                         onPress={() => {
-                            navigation.navigate("Check Plan Page");
+                            fetch(
+                                `${GlobalVariables.serverHost}:${GlobalVariables.serverPort}/${id}`,
+                                {
+                                    method: "GET",
+                                    headers: {
+                                        Accept: "application/json",
+                                        "Content-Type": "application/json",
+                                    },
+                                }
+                            )
+                                .then((response) => response.json())
+                                .then((plansFromServer) => {
+                                    navigation.navigate("Check Plan Page", {
+                                        plansFromServer,
+                                    });
+                                })
+                                .catch((error) => {
+                                    console.log("ERROR: ", error);
+                                });
                         }}
                         backgroundColor="black"
                         text="Check My Plan"

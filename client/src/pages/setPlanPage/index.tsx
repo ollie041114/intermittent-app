@@ -15,15 +15,16 @@ import { DepositInput } from "./components/depositInput";
 import { CustomButton } from "shared/customButton";
 
 import { useSelector } from "react-redux";
+import { GlobalVariables } from "utils/globalVariables";
 
 const initialWeekMap: Map<string, boolean> = new Map([
-    ["Mon", false],
-    ["Tue", false],
-    ["Wen", false],
-    ["Thu", false],
-    ["Fri", false],
-    ["Sat", false],
-    ["Sun", false],
+    ["mon", false],
+    ["tue", false],
+    ["wed", false],
+    ["thu", false],
+    ["fri", false],
+    ["sat", false],
+    ["sun", false],
 ]);
 
 export const SetPlanPage = ({
@@ -74,24 +75,27 @@ export const SetPlanPage = ({
                     <View>
                         <CustomButton
                             onPress={() => {
-                                fetch("http://localhost:3030/plan", {
-                                    method: "POST",
-                                    headers: {
-                                        Accept: "application/json",
-                                        "Content-Type": "application/json",
-                                    },
-                                    body: JSON.stringify({
-                                        userId: id,
-                                        hoursPerDay,
-                                        depositAmount,
-                                        ...Object.fromEntries(weekMap),
-                                    }),
-                                })
+                                fetch(
+                                    `${GlobalVariables.serverHost}:${GlobalVariables.serverPort}/plan`,
+                                    {
+                                        method: "POST",
+                                        headers: {
+                                            Accept: "application/json",
+                                            "Content-Type": "application/json",
+                                        },
+                                        body: JSON.stringify({
+                                            userId: id,
+                                            hoursPerDay,
+                                            depositAmount,
+                                            ...Object.fromEntries(weekMap),
+                                        }),
+                                    }
+                                )
                                     .then((response) => {
-                                        console.log("RESPONSE: ", response);
+                                        console.log("Plan is added");
                                     })
                                     .catch((error) => {
-                                        console.log(error);
+                                        console.log("ERROR: ", error);
                                     });
                             }}
                             text="Save"

@@ -20,36 +20,50 @@ type RewardPlayerProps = {
     targetVelocity: number;
     parentCallback: any;
     add?: number;
+    increaseDeposit: any;
+    earnedDeposit: number;
+    depositAmount: number;
 };
 
-const Reward = (props: RewardPlayerProps) => {
-    const { targetVelocity, targetDistance } = props;
-    const { time, rewardPos, loading, lost, resetReward } = useRewardPosition(
-        targetVelocity,
-        targetDistance
-    );
-    useEffect(() => {
-        props.parentCallback(rewardPos);
-    }, [rewardPos]);
+// const Reward = (props: RewardPlayerProps) => {
+//     const { targetVelocity, targetDistance } = props;
+//     const { time, rewardPos, loading, lost, resetReward } = useRewardPosition(
+//         targetVelocity,
+//         targetDistance
+//     );
+//     useEffect(() => {
+//         props.parentCallback(rewardPos);
+//     }, [rewardPos]);
 
-    useEffect(() => {
-        resetReward();
-    }, [props.gameCount]);
-    return (
-        <CircleCursor distance={rewardPos} {...props}>
-            10
-        </CircleCursor>
-    );
-};
+//     useEffect(() => {
+//         resetReward();
+//     }, [props.gameCount]);
+//     return (
+//         <CircleCursor distance={rewardPos} {...props}>
+//             10
+//         </CircleCursor>
+//     );
+// };
+
+function randomNumberInRange(min: number, max: number) {
+    // 👇️ get number between min (inclusive) and max (inclusive)
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 const Player = (props: RewardPlayerProps) => {
     const METERS_IN_STEP = 0.762;
     // const add = props.add;
     const { currStepCount } = usePedometer();
     const [distance, setDistance] = useState(0);
-
+    const { increaseDeposit, earnedDeposit, depositAmount } = props;
     useEffect(() => {
         setDistance(currStepCount * METERS_IN_STEP);
+        increaseDeposit(
+            earnedDeposit +
+                Math.floor(
+                    randomNumberInRange(0, depositAmount - earnedDeposit) / 10
+                )
+        );
     }, [currStepCount]);
 
     useEffect(() => {
@@ -57,10 +71,10 @@ const Player = (props: RewardPlayerProps) => {
         console.debug(props.add);
     }, [props.add]);
 
-    useEffect(() => {
-        // reset every state
-        setDistance(0);
-    }, [props.gameCount]);
+    // useEffect(() => {
+    //     // reset every state
+    //     setDistance(0);
+    // }, [props.gameCount]);
 
     useEffect(() => {
         props.parentCallback(distance);
@@ -80,32 +94,32 @@ export const ProgressArc = (props: any) => {
 
     const targetVelocity = metersPerSecond; // meters per second
 
-    const { gameCount, setGameCount } = props.game;
-    const { points, setPoints } = props.points;
+    // const { gameCount, setGameCount } = props.game;
+    // const { points, setPoints } = props.points;
 
-    const [playerDistance, setPlayerDistance] = useState(0);
+    const [playerDistance, setPlayerDistance] = useState(100);
     const [rewardDistance, setRewardDistance] = useState(0);
     // callbacks, are set inside of Player and Reward components.
 
     // const [points, setPoints] = useState(0);
-
+    const { increaseDeposit, earnedDeposit, depositAmount } = props;
     useEffect(() => {
         var color = "red";
-        if (rewardDistance >= targetDistance) {
-            // if the reward reached the target distance faster than you
-            console.debug("You lost!");
-            setGameCount(gameCount + 1);
-        } else {
-            if (rewardDistance - playerDistance < 50) {
-                color = "green";
-                setColor(color);
-                if (rewardDistance - playerDistance <= 0) {
-                    console.debug("You won!");
-                    setPoints(points + 1);
-                    setGameCount(gameCount + 1);
-                }
-            }
-        }
+        // if (rewardDistance >= targetDistance) {
+        //     // if the reward reached the target distance faster than you
+        //     console.debug("You lost!");
+        //     // setGameCount(gameCount + 1);
+        // } else {
+        //     if (rewardDistance - playerDistance < 50) {
+        //         color = "green";
+        //         setColor(color);
+        //         if (rewardDistance - playerDistance <= 0) {
+        //             console.debug("You won!");
+        //             // setPoints(points + 1);
+        //             // setGameCount(gameCount + 1);
+        //         }
+        //     }
+        // }
     }, [playerDistance, rewardDistance]);
 
     const { svgWidth, arcWidth, colorIndicator } = props;
@@ -143,7 +157,7 @@ export const ProgressArc = (props: any) => {
                         d={progressArc(playerDistance / targetDistance)}
                         fill={color}
                     />
-                    <Reward
+                    {/* <Reward
                         gameCount={gameCount}
                         arcRadius={middleRadius}
                         r={10}
@@ -153,9 +167,9 @@ export const ProgressArc = (props: any) => {
                         targetDistance={targetDistance}
                         targetVelocity={targetVelocity}
                         parentCallback={setRewardDistance}
-                    />
+                    /> */}
                     <Player
-                        gameCount={gameCount}
+                        // gameCount={gameCount}
                         arcRadius={middleRadius}
                         r={7}
                         add={props.add}
@@ -165,6 +179,9 @@ export const ProgressArc = (props: any) => {
                         targetDistance={targetDistance}
                         targetVelocity={targetVelocity}
                         parentCallback={setPlayerDistance}
+                        increaseDeposit={increaseDeposit}
+                        earnedDeposit={earnedDeposit}
+                        depositAmount={depositAmount}
                     />
                 </G>
             </Svg>

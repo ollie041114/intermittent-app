@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StackNavigationProp } from "@react-navigation/stack";
 import {
     Dimensions,
@@ -10,44 +10,53 @@ import {
 } from "react-native";
 
 import { CustomButton } from "../../shared/customButton";
+import { Plan } from "shared/entities/plan.entity";
+import { RunningPlan } from "shared/entities/runningPlan.entity";
+import { TodayPlan } from "./components/todayPlan";
+import { dateNowKR } from "utils/getDateNow";
 
-const weekDaysMap: Map<string, boolean> = new Map([
-    ["Mon", true],
-    ["Tue", false],
-    ["Wed", true],
-    ["Thu", false],
-    ["Fri", true],
-    ["Sat", false],
-    ["Sun", false],
-]);
 const weekNamesArray: string[] = [
-    "Sun",
-    "Mon",
-    "Tue",
-    "Wed",
-    "Thu",
-    "Fri",
-    "Sat",
+    "sun",
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat",
 ];
 
-const hours = 2;
-const deposit = 10000;
-const dateNowKR = () => {
-    const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
-    const nowUTC = new Date();
-    const nowKorea = nowUTC.getTime() + KR_TIME_DIFF;
-    return new Date(nowKorea);
-};
-
 export const CheckPlanPage = ({
+    route,
     navigation,
 }: {
+    route: any;
     navigation: StackNavigationProp<any, any>;
 }) => {
     //checkbox array
+
     const currentDate: Date = dateNowKR();
     const currentWeekday: number = currentDate.getDay();
     const currentWeekdayName: string = weekNamesArray[currentWeekday];
+    const { plansFromServer } = route.params;
+    const plansToday: Plan[] = [];
+    plansFromServer.forEach((planRead: any) => {
+        if (Object.keys(planRead).length == 0) return;
+        if (!planRead[currentWeekdayName]) return;
+        const planAdd = new Plan();
+        planAdd.depositAmount = planRead.depositAmount;
+        planAdd.hoursPerDay = planRead.hoursPerDay;
+        planAdd.weekMap.set("mon", planRead.mon);
+        planAdd.weekMap.set("tue", planRead.tue);
+        planAdd.weekMap.set("wed", planRead.wed);
+        planAdd.weekMap.set("thu", planRead.thu);
+        planAdd.weekMap.set("fri", planRead.fri);
+        planAdd.weekMap.set("sat", planRead.sat);
+        planAdd.weekMap.set("sun", planRead.sun);
+        plansToday.push(planAdd);
+    });
+    const [selectedPlan, selectPlan] = useState(new Plan());
+    const [selected, select] = useState(false);
+
     return (
         <SafeAreaView>
             <ScrollView
@@ -55,17 +64,36 @@ export const CheckPlanPage = ({
                 contentInsetAdjustmentBehavior="automatic"
             >
                 <View style={styles.container}>
-                    {/* {weekDaysMap.get(currentWeekdayName) ? ( */}
-                    {true ? (
+                    {plansToday.length > 0 ? (
                         <View style={styles.container}>
                             <Text style={styles.title}>
-                                You can start training
+                                Choose the training plan for{" "}
+                                {currentWeekdayName}
                             </Text>
+                            {plansToday.map((plan, i) => {
+                                return (
+                                    <TodayPlan
+                                        select={select}
+                                        selectPlan={selectPlan}
+                                        plan={plan}
+                                        key={i}
+                                    ></TodayPlan>
+                                );
+                            })}
+
                             <CustomButton
                                 onPress={() => {
-                                    navigation.navigate("Start Running Page");
+                                    const runningPlan: RunningPlan = {
+                                        depositAmount:
+                                            selectedPlan.depositAmount,
+                                        hoursPerDay: selectedPlan.hoursPerDay,
+                                    };
+                                    navigation.navigate("Start Running Page", {
+                                        startTime: Date.now(),
+                                        runningPlan,
+                                    });
                                 }}
-                                backgroundColor="black"
+                                backgroundColor={selected ? "black" : "grey"}
                                 text="Start running"
                             ></CustomButton>
                         </View>
@@ -84,14 +112,14 @@ export const CheckPlanPage = ({
 
 const styles = StyleSheet.create({
     title: {
-        fontSize: 20,
+        fontSize: 19,
         margin: 40,
         fontWeight: "bold",
     },
     container: {
         flex: 1,
         alignItems: "center",
-        justifyContent: "center",
+        // justifyContent: "center",
         paddingBottom: 50,
         minHeight: Dimensions.get("window").height - 50,
     },

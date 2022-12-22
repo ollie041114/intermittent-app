@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Text, View } from "react-native";
 import { Pedometer } from "expo-sensors";
 
-export function Pedo() {
-    const [currStepCount, setCurrStepCount] = useState(0);
+export const Pedo = (props: any) => {
+    const { currStepCount, setCurrStepCount } = props;
+    // console.log(currStepCount);
+    // console.log(setCurrStepCount);
     const [pastStepCount, setPastStepCount] = useState(0);
     const [isPedometerAvailable, setIsPedometerAvailable] =
         useState("checking");
@@ -37,9 +39,8 @@ export function Pedo() {
     );
     return (
         <View>
-            <Text>Pedometer.isAvailableAsync(): {isPedometerAvailable}</Text>
             <Text>Steps taken in the last 24 hours: {pastStepCount}</Text>
             <Text>Walk! And watch this go up: {currStepCount}</Text>
         </View>
     );
-}
+};

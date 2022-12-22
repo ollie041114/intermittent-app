@@ -37,6 +37,14 @@ export class AppService {
     }
   }
 
+  async getPlan(id: number): Promise<any> {
+    try {
+      return await this.planRepository.findBy({ userId: id });
+    } catch (error: any) {
+      return null;
+    }
+  }
+
   async devInit() {
     await Promise.all([
       this.dataSource.getRepository(User).clear(),
@@ -57,6 +65,7 @@ export class AppService {
       await prev;
       return this.createPlan(mockup);
     }, Promise.resolve() as any);
+    console.log('Dev init is done!');
   }
 
   getHello(): string {

@@ -10,7 +10,7 @@ export const useColorIndication = (distance: number) => {
     return colorIndicator;
 };
 
-export const ProgressCircleWrapper = () => {
+export const ProgressCircleWrapper = (props: any) => {
     const METERS_IN_STEP = 0.762;
 
     // const [key, setKey] = useState(0);
@@ -21,26 +21,30 @@ export const ProgressCircleWrapper = () => {
 
     const [add, setAdd] = useState(0);
     // this is just an artificial way to add steps through buttons.
-    const [gameCount, setGameCount] = useState(0);
+    // const [gameCount, setGameCount] = useState(0);
     // this is counting how many rounds you have won/lost.
-    const [points, setPoints] = useState(0);
+    // const [points, setPoints] = useState(0);
     // this is counting how many points you have won/lost so far.
     const [end, setEnd] = useState(false);
     // this is going to be
 
+    const { increaseDeposit, earnedDeposit, depositAmount } = props;
     return (
         <View>
-            <Text>
+            {/* <Text>
                 Game number: {gameCount}
                 Points: {points}
-            </Text>
+            </Text> */}
             <ProgressArc
                 // keyManagement = {{key, setKey}}
                 svgWidth={svgWidth}
                 arcWidth={arcWidth}
                 add={add}
-                game={{ gameCount, setGameCount }}
-                points={{ points, setPoints }}
+                // game={{ gameCount, setGameCount }}
+                // points={{ points, setPoints }}
+                increaseDeposit={increaseDeposit}
+                earnedDeposit={earnedDeposit}
+                depositAmount={depositAmount}
             />
             <Button
                 onPress={() => {

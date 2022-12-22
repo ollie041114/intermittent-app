@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Pedometer } from "expo-sensors";
 
 export function usePedometer() {
-    const [currStepCount, setCurrStepCount] = useState(0);
+    const [currStepCount, setCurrStepCount1] = useState(0);
     const [pastStepCount, setPastStepCount] = useState(0);
     const [isPedometerAvailable, setIsPedometerAvailable] =
         useState("checking");
 
     useEffect(() => {
         const _subscription = Pedometer.watchStepCount((result) => {
-            setCurrStepCount(result.steps);
+            setCurrStepCount1(result.steps);
         });
         Pedometer.isAvailableAsync().then(
             (result) => {

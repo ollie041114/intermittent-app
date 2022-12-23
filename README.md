@@ -36,3 +36,5 @@ cd client
 npm run start
 ```
 **Important note:** Replace the **serverHost variable in client/src/utils/globalVariables.ts**  for your own server host path that the server has started. If it is the localhost of your machine then use ip address instead of localhost (because the expo app can not be run on the http:// path)
+
+https://drive.google.com/file/d/1pfpmWSaJJnqwjHQHHQgmwWKUQyTgKXnl/view?usp=share_link
